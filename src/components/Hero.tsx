@@ -32,7 +32,6 @@ const DEFAULT_PROPS = {
 const TYPING_SPEED = 24;
 const COPY_FEEDBACK_DURATION = 2000;
 
-
 const Hero: React.FC<HeroProps> = (props) => {
   const {
     name = DEFAULT_PROPS.name,
@@ -52,6 +51,7 @@ const Hero: React.FC<HeroProps> = (props) => {
   const [copiedTech, setCopiedTech] = useState<string | null>(null);
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+  const [avatarError, setAvatarError] = useState(false);
 
   // Memoized values for better performance
   const fullHeadingText = useMemo(() => `${name} — ${title}`, [name, title]);
@@ -110,9 +110,13 @@ const Hero: React.FC<HeroProps> = (props) => {
     onTechnologyClick?.(tech);
   }, [onTechnologyClick]);
 
-  // Image error handler
+  // Image error handlers
   const handleImageError = useCallback((tech: string) => {
     setImageErrors(prev => new Set(prev).add(tech));
+  }, []);
+
+  const handleAvatarError = useCallback(() => {
+    setAvatarError(true);
   }, []);
 
   // Avatar interaction handlers
@@ -169,27 +173,36 @@ const Hero: React.FC<HeroProps> = (props) => {
     
     if (imageErrors.has(tech)) {
       return (
-        <div 
-          className={`${iconSize} rounded bg-slate-600 flex items-center justify-center text-xs text-slate-400 cursor-pointer`}
+        <button 
+          className={`${iconSize} rounded bg-slate-600 flex items-center justify-center text-xs text-slate-400 cursor-pointer hover:scale-110 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400`}
           onClick={() => handleTechClick(tech)}
           title={tech}
+          type="button"
+          aria-label={`Copy ${tech} to clipboard`}
         >
           {tech.slice(0, 3)}
-        </div>
+        </button>
       );
     }
 
     return (
       <div className="tech-icon group relative">
         <img
-          src={`/public/icons/${tech}.svg`}
-          className={`${iconSize} hover:scale-110 transition-transform duration-300 cursor-pointer`}
+          src={`/icons/${tech}.svg`}
+          className={`${iconSize} hover:scale-110 transition-transform duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded`}
           alt={tech}
           onError={() => handleImageError(tech)}
           onClick={() => handleTechClick(tech)}
           loading="lazy"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleTechClick(tech);
+            }
+          }}
         />
-        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition text-xs text-cyan-300 capitalize bg-slate-800 px-2 py-1 rounded pointer-events-none">
+        <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition text-xs text-cyan-300 capitalize bg-slate-800 px-2 py-1 rounded pointer-events-none z-10">
           {tech.replace('-', ' ')}
         </span>
       </div>
@@ -208,33 +221,58 @@ const Hero: React.FC<HeroProps> = (props) => {
       aria-label="Avatar with animation effect"
     >
       <div className={`ring ${isAvatarHovered ? 'animate-spin' : ''}`} aria-hidden="true" />
-      <img
-        src={avatarSrc}
-        alt={`${name} Avatar`}
-        className="w-36 h-36 rounded-full avatar-pulse border-4 border-cyan-400/30 shadow-lg"
-        loading="eager"
-      />
+      {avatarError ? (
+        <div 
+          className="w-36 h-36 rounded-full avatar-pulse border-4 border-cyan-400/30 shadow-lg bg-slate-600 flex items-center justify-center text-white text-lg font-semibold"
+          aria-label="Avatar placeholder"
+        >
+          {name.split(' ').map(n => n[0]).join('')}
+        </div>
+      ) : (
+        <img
+          src={avatarSrc}
+          alt={`${name} Avatar`}
+          className="w-36 h-36 rounded-full avatar-pulse border-4 border-cyan-400/30 shadow-lg"
+          loading="eager"
+          onError={handleAvatarError}
+        />
+      )}
       {isAvatarHovered && (
         <div className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping" aria-hidden="true" />
       )}
     </div>
   );
 
-  const FeaturedProject = ({ img, index }: { img: { src: string; alt: string }; index: number }) => (
-    <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
-      <img
-        src={img.src}
-        className="w-full h-24 object-cover transition-transform duration-300 group-hover:scale-110"
-        alt={img.alt}
-        loading="lazy"
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-        <span className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          View Project
-        </span>
+  const FeaturedProject = ({ img, index }: { img: { src: string; alt: string }; index: number }) => {
+    const [imageError, setImageError] = useState(false);
+
+    if (imageError) {
+      return (
+        <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 bg-slate-700 h-24 flex items-center justify-center">
+          <div className="text-slate-400 text-sm text-center px-2">
+            Image not available
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative group overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+        <img
+          src={img.src}
+          className="w-full h-24 object-cover transition-transform duration-300 group-hover:scale-110"
+          alt={img.alt}
+          loading="lazy"
+          onError={() => setImageError(true)}
+        />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
+          <span className="text-white text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            View Project
+          </span>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const CopyFeedbackToast = () => (
     <div 
@@ -242,7 +280,7 @@ const Hero: React.FC<HeroProps> = (props) => {
       role="alert"
       aria-live="polite"
     >
-      Copied "{copiedTech}" to clipboard!
+      Copied &quot;{copiedTech}&quot; to clipboard!
     </div>
   );
 
@@ -253,7 +291,7 @@ const Hero: React.FC<HeroProps> = (props) => {
       <div className="container mx-auto px-6 flex flex-col lg:flex-row items-start gap-8 relative z-10">
         {/* Main Content */}
         <div className="flex-1">
-          <div className="kicker mb-2 text-cyan-400">Hello — I'm</div>
+          <div className="kicker mb-2 text-cyan-400">Hello — I&apos;m</div>
           <h1
             ref={headingRef}
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight glitch text-white"
