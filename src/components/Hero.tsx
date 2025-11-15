@@ -19,11 +19,11 @@ const DEFAULT_PROPS = {
   title: "Software Engineer & IT Specialist",
   description: "I design, build and maintain scalable web and mobile applications with clean architecture and pragmatic engineering. I focus on performance, automation and real-world reliability.",
   coreTechnologies: ['JavaScript', 'React', 'React Native', 'Node.js', 'Python', 'MySQL', 'MongoDB', 'Firebase', 'Docker', 'MQL4'],
-  orbitTechnologies: ['javascript', 'typescript', 'react', 'react-native', 'nodejs', 'python', 'java', 'cpp', 'csharp', 'kotlin', 'swift', 'go', 'rust', 'php', 'mysql', 'mongodb', 'firebase', 'docker', 'git'],
-  avatarSrc: "/public/images/avatar-1.jpeg",
+  orbitTechnologies: ['javascript','typescript','react','react-native','nodejs','python','java','cpp','csharp','kotlin','swift','go','rust','php','mysql','mongodb','firebase','docker','git'],
+  avatarSrc: "/assets/images/avatar-1.jpeg",
   featuredImages: [
-    { src: "/public/images/healthcare.jpg", alt: "Healthcare App Preview" },
-    { src: "/public/images/socialmedia.png", alt: "Social Media App Preview" },
+    { src: "/assets/images/healthcare.jpg", alt: "Healthcare App Preview" },
+    { src: "/assets/images/socialmedia.png", alt: "Social Media App Preview" },
   ],
   showTypingEffect: true,
   showOrbitAnimation: true,
@@ -31,6 +31,7 @@ const DEFAULT_PROPS = {
 
 const TYPING_SPEED = 24;
 const COPY_FEEDBACK_DURATION = 2000;
+
 
 const Hero: React.FC<HeroProps> = (props) => {
   const {
