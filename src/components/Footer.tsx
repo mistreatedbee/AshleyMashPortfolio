@@ -193,25 +193,5 @@ const Footer: React.FC<FooterProps> = ({
   );
 };
 
-// Main App component to demonstrate the Footer
-const App: React.FC = () => {
-    return (
-        <div className="min-h-screen bg-gray-950 font-sans text-white">
-            <header className="p-12 text-center text-4xl font-extrabold tracking-tight text-cyan-400 bg-gray-900 shadow-xl shadow-gray-900/50">
-                <h1 id="home">Portfolio Demonstration Layout</h1>
-                <p className="mt-2 text-base text-slate-500 font-medium">This is where the main content would go.</p>
-            </header>
-            
-            {/* Minimal content to ensure the page has scrollability for the 'Back to Top' button */}
-            <main className="container mx-auto p-12 max-w-7xl">
-                <div className="h-[100vh] bg-gray-800/20 border border-gray-700 rounded-xl p-8 flex items-center justify-center text-slate-400">
-                    Scroll down to see the footer and its 'Back to Top' functionality.
-                </div>
-            </main>
-            
-            <Footer />
-        </div>
-    );
-};
 
 export default App;
