@@ -112,7 +112,7 @@ const CallToActionButtons: React.FC = () => (
       Contact Me
     </a>
     <a
-      href="/resume.pdf"
+      href="/assets/CV/MyCV.pdf"
       target="_blank"
       rel="noopener noreferrer"
       className="px-6 py-3 rounded-lg border border-slate-400/50 text-slate-300 hover:bg-slate-400/10 hover:border-slate-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900 neon-border"
