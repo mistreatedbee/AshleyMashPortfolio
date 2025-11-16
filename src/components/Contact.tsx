@@ -312,7 +312,7 @@ const App: React.FC = () => {
     return (
         <div className="min-h-[120vh] bg-gray-950 font-sans">
             <header className="p-12 text-center text-3xl font-bold bg-gray-900 text-white">
-                Website Header Area
+                Securing Ideas, Building Tomorrow!
             </header>
             <Contact />
         </div>
