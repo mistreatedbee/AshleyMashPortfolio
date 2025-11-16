@@ -62,7 +62,7 @@ const Contact: React.FC<ContactProps> = ({
     mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.902!2d30.9833!3d-25.4667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee8c5b5b5b5b5b5%3A0x1ee8c5b5b5b5b5b5!2sMbombela%2C%20South%20Africa!5e0!3m2!1sen!2s!4v1234567890!5m2!1sen!2s",
   },
   socialLinks = [
-    { name: "GitHub", url: "https://github.com/ashleymashigo", iconType: 'github' },
+    { name: "GitHub", url: "https://github.com/mistreatedbee", iconType: 'github' },
     { name: "LinkedIn", url: "https://linkedin.com/in/ashleymashigo", iconType: 'linkedin' },
     { name: "Email", url: "mailto:ashleymashigo013@gmail.com", iconType: 'email' },
   ],
