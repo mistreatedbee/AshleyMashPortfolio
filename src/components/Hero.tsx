@@ -35,7 +35,7 @@ const COPY_FEEDBACK_DURATION = 2000;
 const NEON_COLOR = '#06b6d4'; // Tailwind cyan-500
 const NEON_SHADOW = `0 0 5px ${NEON_COLOR}, 0 0 15px ${NEON_COLOR}, 0 0 25px ${NEON_COLOR}55`;
 
-// --- HELPER COMPONENTS (Moved outside Hero for better performance) -------------
+// --- HELPER COMPONENTS (EXTRACTED FOR PERFORMANCE) ---------------------------
 
 interface TechIconProps {
   tech: string;
@@ -47,7 +47,7 @@ interface TechIconProps {
 
 const TechnologyIcon: React.FC<TechIconProps> = ({ tech, size = 'medium', imageErrors, handleTechClick, handleImageError }) => {
   const iconSize = size === 'small' ? 'w-6 h-6' : 'w-12 h-12';
-  
+    
   if (imageErrors.has(tech)) {
     return (
       <button 
@@ -67,7 +67,7 @@ const TechnologyIcon: React.FC<TechIconProps> = ({ tech, size = 'medium', imageE
       <img
         src={`/assets/icons/${tech}.svg`}
         className={`${iconSize} hover:scale-110 transition-transform duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-cyan-400 rounded neon-glow`}
-        alt={tech}
+        alt={`${tech} icon`}
         onError={() => handleImageError(tech)}
         onClick={() => handleTechClick(tech)}
         loading="lazy"
@@ -89,7 +89,7 @@ const TechnologyIcon: React.FC<TechIconProps> = ({ tech, size = 'medium', imageE
 const TechnologyPill: React.FC<{ tech: string; handleTechClick: (tech: string) => void }> = ({ tech, handleTechClick }) => (
   <button
     onClick={() => handleTechClick(tech)}
-    className="skill-pill px-4 py-2 bg-slate-700/50 hover:bg-cyan-500/20 border border-slate-600 hover:border-cyan-400 rounded-full text-slate-300 hover:text-cyan-300 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-800"
+    className="skill-pill px-4 py-2 bg-slate-700/50 hover:bg-cyan-500/20 border border-slate-600 hover:border-cyan-400 rounded-full text-slate-300 hover:text-cyan-300 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-800 neon-glow"
     aria-label={`Copy ${tech} to clipboard`}
     type="button"
   >
@@ -107,7 +107,7 @@ const CallToActionButtons: React.FC = () => (
     </a>
     <a
       href="#contact"
-      className="px-6 py-3 rounded-lg border border-cyan-400/50 text-cyan-300 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+      className="px-6 py-3 rounded-lg border border-cyan-400/50 text-cyan-300 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-slate-900 neon-border"
     >
       Contact Me
     </a>
@@ -115,7 +115,7 @@ const CallToActionButtons: React.FC = () => (
       href="/resume.pdf"
       target="_blank"
       rel="noopener noreferrer"
-      className="px-6 py-3 rounded-lg border border-slate-400/50 text-slate-300 hover:bg-slate-400/10 hover:border-slate-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+      className="px-6 py-3 rounded-lg border border-slate-400/50 text-slate-300 hover:bg-slate-400/10 hover:border-slate-400 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900 neon-border"
       aria-label="Download CV (PDF)"
     >
       Download CV
@@ -216,6 +216,7 @@ const Hero: React.FC<HeroProps> = (props) => {
         setCopiedTech(tech);
         setTimeout(() => setCopiedTech(null), COPY_FEEDBACK_DURATION);
       } else {
+        // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = tech;
         textArea.style.position = 'fixed';
@@ -244,21 +245,25 @@ const Hero: React.FC<HeroProps> = (props) => {
   const handleAvatarEnter = useCallback(() => setIsAvatarHovered(true), []);
   const handleAvatarLeave = useCallback(() => setIsAvatarHovered(false), []);
 
-  // --- SUB-COMPONENTS (Defined as functions using state/props from Hero) ---
+  // --- SUB-COMPONENTS (Defined inside Hero to access state/handlers) ---
 
   const AnimatedBackground = () => (
     <>
+      {/* Sci-fi Grid Background */}
       <div className="absolute inset-0 opacity-10" aria-hidden="true">
         <div className="grid-bg"></div>
       </div>
+      {/* Floating Particles */}
       <div className="particle particle-1" aria-hidden="true"></div>
       <div className="particle particle-2" aria-hidden="true"></div>
       <div className="particle particle-3" aria-hidden="true"></div>
       <div className="particle particle-4" aria-hidden="true"></div>
       <div className="particle particle-5" aria-hidden="true"></div>
+      {/* Enhanced Blobs with Neon Glow */}
       <div className="blob blob-a animate-pulse" aria-hidden="true" />
       <div className="blob blob-b animate-pulse delay-1000" aria-hidden="true" />
       <div className="blob blob-c animate-pulse delay-2000" aria-hidden="true" />
+      {/* Holographic Scan Line */}
       <div className="scan-line" aria-hidden="true"></div>
     </>
   );
@@ -307,6 +312,7 @@ const Hero: React.FC<HeroProps> = (props) => {
     </div>
   );
 
+
   // --- MAIN RENDER ---
 
   return (
@@ -319,7 +325,7 @@ const Hero: React.FC<HeroProps> = (props) => {
           <div className="kicker mb-2 text-cyan-400 neon-text">Hello — I&apos;m</div>
           <h1
             ref={headingRef}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight glitch text-white"
+            className="glitch-text text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white"
             data-text={fullHeadingText}
             aria-live={showTypingEffect ? "polite" : "off"}
           >
@@ -344,7 +350,7 @@ const Hero: React.FC<HeroProps> = (props) => {
             </div>
           </section>
 
-          {/* Tech Icons Grid (Orbit technologies repurposed into a grid) */}
+          {/* Tech Icons Grid */}
           <section aria-labelledby="tech-stack-heading" className="mt-10">
             <h2 id="tech-stack-heading" className="kicker text-cyan-400 neon-text">
               Tech Stack
@@ -382,9 +388,9 @@ const Hero: React.FC<HeroProps> = (props) => {
               {isAvatarHovered ? "Nice to meet you!" : "Hover or focus the avatar for a surprise"}
             </div>
 
-            {/* Orbiting Icons (Replaced with bouncing icons for a simpler implementation without complex orbit CSS) */}
+            {/* Orbiting Icons (Simple bouncing animation) */}
             {showOrbitAnimation && (
-              <div className="absolute -left-16 top-6 flex flex-col gap-3" aria-hidden="true">
+              <div className="absolute -left-16 top-6 flex flex-col gap-3 animate-bounce" aria-hidden="true">
                 {displayedOrbitTechnologies.map((tech, index) => (
                   <div
                     key={tech}
@@ -449,6 +455,8 @@ export default Hero;
 const HeroStyles: React.FC = () => (
   <style>
     {`
+      @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+      
       /* Keyframes */
       @keyframes fade-in {
         from { opacity: 0; transform: translateY(10px); }
@@ -459,8 +467,12 @@ const HeroStyles: React.FC = () => (
         to { transform: rotate(360deg); }
       }
       @keyframes neon-flicker {
-        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { box-shadow: ${NEON_SHADOW}; }
-        20%, 24%, 55% { box-shadow: 0 0 1px ${NEON_COLOR}, 0 0 5px ${NEON_COLOR}99; }
+        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { 
+          text-shadow: ${NEON_SHADOW}; 
+        }
+        20%, 24%, 55% { 
+          text-shadow: 0 0 1px ${NEON_COLOR}, 0 0 5px ${NEON_COLOR}99; 
+        }
       }
       @keyframes scan-line-move {
         0% { transform: translateY(0); }
@@ -502,6 +514,26 @@ const HeroStyles: React.FC = () => (
         box-shadow: 0 0 15px #0ea5e9, 0 0 30px #0ea5e9aa; 
       }
 
+      /* Glitch Text Styling */
+      .glitch-text {
+        font-family: 'VT323', monospace;
+        font-size: 4rem;
+        line-height: 1.1;
+        animation: neon-flicker 4s infinite step-end;
+        text-shadow: ${NEON_SHADOW};
+        color: #fff;
+        position: relative;
+        /* Ensure H1 font matches the size for the glitch-text class applied in the render */
+        /* Use a higher font size to match the provided Tailwind classes */
+        font-size: 3rem; /* fallback for md:text-5xl */
+      }
+      @media (min-width: 768px) {
+        .glitch-text { font-size: 4rem; } /* md:text-5xl */
+      }
+      @media (min-width: 1024px) {
+        .glitch-text { font-size: 5rem; } /* lg:text-6xl */
+      }
+      
       /* Background Grid */
       .grid-bg {
         --grid-color: rgba(6, 182, 212, 0.1); /* Cyan/Slate */
@@ -523,6 +555,7 @@ const HeroStyles: React.FC = () => (
         filter: blur(100px);
         transition: transform 1s ease-out;
         mix-blend-mode: screen;
+        z-index: 0;
       }
       .blob-a { background-color: #06b6d4; top: 10%; left: 10%; animation: blob-move-a 20s infinite alternate; }
       .blob-b { background-color: #3b82f6; top: 50%; right: 10%; animation: blob-move-b 25s infinite alternate; }
@@ -546,14 +579,6 @@ const HeroStyles: React.FC = () => (
         box-shadow: ${NEON_SHADOW};
       }
       
-      /* Glitch Effect (Simplistic CSS Glitch for H1) */
-      .glitch {
-        animation: neon-flicker 4s infinite step-end;
-        text-shadow: ${NEON_SHADOW};
-        color: #fff;
-        position: relative;
-      }
-      
       /* Scan Line */
       .scan-line {
         position: absolute;
@@ -565,6 +590,7 @@ const HeroStyles: React.FC = () => (
         opacity: 0.2;
         animation: scan-line-move 10s linear infinite;
         pointer-events: none;
+        z-index: 10;
       }
       
       /* Particles (Small pulsing dots) */
@@ -575,12 +601,32 @@ const HeroStyles: React.FC = () => (
         opacity: 0.8;
         animation: pulse 4s infinite alternate;
         pointer-events: none;
+        z-index: 1;
       }
       .particle-1 { top: 5%; left: 5%; width: 4px; height: 4px; animation-delay: 0.5s; }
       .particle-2 { top: 80%; left: 90%; width: 6px; height: 6px; animation-delay: 1.5s; }
       .particle-3 { top: 30%; left: 40%; width: 3px; height: 3px; animation-delay: 2.5s; }
       .particle-4 { top: 60%; left: 15%; width: 5px; height: 5px; animation-delay: 3.5s; }
       .particle-5 { top: 10%; right: 20%; width: 7px; height: 7px; animation-delay: 4.5s; }
+      
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.5); opacity: 1; }
+      }
+      /* Ensure animate-bounce is defined if not using full Tailwind CSS */
+      .animate-bounce {
+          animation: bounce 1s infinite;
+      }
+      @keyframes bounce {
+        0%, 100% {
+          transform: translateY(-25%);
+          animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+        }
+        50% {
+          transform: translateY(0);
+          animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+        }
+      }
     `}
   </style>
 );
