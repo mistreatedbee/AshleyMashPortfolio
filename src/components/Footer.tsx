@@ -64,10 +64,10 @@ const Footer: React.FC<FooterProps> = ({
   name = "Ashley Mashigo",
   title = "Software Engineer • IT Specialist • Full-Stack Developer",
   socialLinks = {
-    github: "https://github.com/ashleymashigo",
+    github: "https://github.com/mistreatedbee",
     linkedin: "https://linkedin.com/in/ashleymashigo",
     twitter: "https://twitter.com/ashleymashigo",
-    email: "mailto:ashley.mashigo@example.com",
+    email: "mailto:ashleymashigo013@gmail.com",
   },
   navLinks = [
     { label: "Home", href: "#home" },
